@@ -1,0 +1,41 @@
+@startuml InquirySystem
+title Inquiry System for Taiwan Traffic Data
+
+
+interface Search{
+    + get_data(Sheet sht, dict<str> command): DataFrame
+}
+
+interface Sort{
+    + sort_data(DataFrame data, list<str> command): DataFrame
+}
+
+class Data{
+    - vehicle_type: int
+    - derectiontime_o: datetime64
+    - gantryid_o: str
+    - derectiontime_d: datetime64
+    - gantryid_d: str
+    - trip_len: float
+    - trip_end: bool
+    - info: str
+}
+
+class Sheet{
+    - sheet: list<Data>
+    + add_row(Data data): void
+    + del_row(int): void
+    + get_row(int): Data
+    + change_row(int): void
+}
+
+class GUI{
+    - mainwindow
+    + show(DataFrame) : void
+}
+
+
+Sheet "1" *-- "many" Data: has
+Sheet <-- Search
+Sheet <-- Sort
+@enduml
