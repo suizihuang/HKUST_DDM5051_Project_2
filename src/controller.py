@@ -1,0 +1,99 @@
+# -*- coding: utf-8 -*-
+# Author    : Cynthia Guan
+# Create    : 12/04/2021  22:32:06
+# Final Edit: 12/05/2021  03:32:06
+# Software: PyCharm
+
+import gui
+import re
+import search
+import model
+import sort
+
+
+def check_order1():
+    if window.vt.v_type.get():
+        window.vt.order.config(state='readonly')
+        window.vt.order.current(0)
+    else:
+        window.vt.order.config(state='disabled')
+        window.vt.order.set('')
+
+
+def check_order2():
+    if window.dto.v_type.get():
+        window.dto.order.config(state='readonly')
+        window.dto.order.current(0)
+    else:
+        window.dto.order.config(state='disabled')
+        window.dto.order.set('')
+
+
+def check_order3():
+    if window.gido.v_type.get():
+        window.gido.order.config(state='readonly')
+        window.gido.order.current(0)
+    else:
+        window.gido.order.config(state='disabled')
+        window.gido.order.set('')
+
+
+def check_order4():
+    if window.dtd.v_type.get():
+        window.dtd.order.config(state='readonly')
+        window.dtd.order.current(0)
+    else:
+        window.dtd.order.config(state='disabled')
+        window.dtd.order.set('')
+
+
+def check_order5():
+    if window.gidd.v_type.get():
+        window.gidd.order.config(state='readonly')
+        window.gidd.order.current(0)
+    else:
+        window.gidd.order.config(state='disabled')
+        window.gidd.order.set('')
+
+def check_legality():
+    search_list = [window.vehicle_type.combo.get(), window.dtime_O.s_time.get(),\
+                   window.dtime_O.e_time.get(), window.gantry_id_O.combo.get(),\
+                   window.dtime_D.s_time.get(), window.dtime_D.e_time.get(),\
+                   window.gantry_id_D.combo.get(), window.trip_end.combo.get()]
+    dates = search_list[1:3] + search_list[4:6]
+
+    legal = True
+
+    for date in dates:
+        if not date:
+            continue
+        if re.match('2[0-3]:[0-5][0-9]:[0-5][0-9]', date):
+            continue
+        if re.match('[0-2][0-9]:[0-5][0-9]:[0-5][0-9]', date):
+            continue
+        legal = False
+
+    if not legal:
+        window.erro_message('Please input time in this format:\n xx:xx:xx')
+    else:
+        search_list[1] = search_list[1] + '-' + search_list[2]
+        search_list[4] = search_list[4] + '-' + search_list[5]
+        del search_list[2]
+        del search_list[4]
+        search_result = search.Search(data.sheet, search_list)
+        sort_list = [window.vt.order.get(), window.dto.order.get(), window.gido.order.get(),\
+                     window.dtd.order.get(), window.gidd.order.get()]
+        sort_result = sort.sort(search_result, sort_list)
+        if not sort_result:
+            window.no_result()
+
+if __name__ == '__main__':
+    data = model.Sheet()
+    window = gui.GUI(['a', 'b'], ['a', 'b'], ['a', 'b'])
+    window.begin.config(command=check_legality)
+    window.vt.check.config(command=check_order1)
+    window.dto.check.config(command=check_order2)
+    window.gido.check.config(command=check_order3)
+    window.dtd.check.config(command=check_order4)
+    window.gidd.check.config(command=check_order5)
+    window.root_window.mainloop()
