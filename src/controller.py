@@ -55,6 +55,16 @@ def check_order5():
         window.gidd.order.config(state='disabled')
         window.gidd.order.set('')
 
+
+def check_order6():
+    if window.triplen.v_type.get():
+        window.triplen.order.config(state='readonly')
+        window.triplen.order.current(0)
+    else:
+        window.triplen.order.config(state='disabled')
+        window.triplen.order.set('')
+
+
 def check_legality():
     search_list = [window.vehicle_type.combo.get(), window.dtime_O.s_time.get(),\
                    window.dtime_O.e_time.get(), window.gantry_id_O.combo.get(),\
@@ -87,6 +97,9 @@ def check_legality():
         if not sort_result:
             window.no_result()
 
+
+
+
 if __name__ == '__main__':
     data = model.Sheet()
     vehicle_type = data.get_vehichle_type()
@@ -99,4 +112,5 @@ if __name__ == '__main__':
     window.gido.check.config(command=check_order3)
     window.dtd.check.config(command=check_order4)
     window.gidd.check.config(command=check_order5)
+    window.triplen.check.config(command=check_order6)
     window.root_window.mainloop()

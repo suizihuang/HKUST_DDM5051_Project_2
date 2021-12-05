@@ -18,6 +18,7 @@ master_frame--------------------------------------------------------------------
     |  |  |    tick      | |      tick    | |      tick    | |      tick    | |      tick    | |  |
     |  |  | ascend(cbox) | | ascend(cbox) | | ascend(cbox) | | ascend(cbox) | | ascend(cbox) | |  |
     |  |   --------------   --------------   --------------   --------------   --------------  |  |
+    |   ---------------------------------------------------------------------------------------
     |                                       -----------                                           |
     |                                      |   Search  |                                          |
     |                                       -----------                                           |
@@ -48,13 +49,14 @@ class GUI:
         self.gantry_id_O = NamedCombobox(self.box1, "First Gantry ID", gantry_id_olist)
         self.dtime_D = Namedtimetextbox(self.box1, "Last Detection Time")
         self.gantry_id_D = NamedCombobox(self.box1, "Last Gantry ID", gantry_id_dlist)
-        self.trip_end = NamedCombobox(self.box1, "First Gantry ID", ['Yes', 'No',''])
+        self.trip_end = NamedCombobox(self.box1, "Trip Finished", ['Yes', 'No',''])
         self.box2 = tk.LabelFrame(self.root_window, text="Sort by", font=30)
         self.vt = SelectionBox(self.box2, "Vehicle Type")
         self.dto = SelectionBox(self.box2, "First Detection Time")
         self.gido = SelectionBox(self.box2, "First Gantry ID")
         self.dtd = SelectionBox(self.box2, "Last Detection Time")
         self.gidd = SelectionBox(self.box2, "Last Gantry ID")
+        self.triplen = SelectionBox(self.box2, "Trip Length")
         self.box2.pack(expand=1, fill=tk.X, padx=40)
         self.begin = tk.Button(self.root_window, text="Search", font=20, height=1, width=10)
         self.begin.pack(pady=10)
@@ -65,7 +67,9 @@ class GUI:
     def no_result(self):
         tk.messagebox.showinfo(title='No result', message='Sorry, we can\'t find compatible results')
 
-    def show_result(self, result: pd.DataFrame, human_readable):
+    def show_result(self, result: pd.DataFrame):
+        human_readable = ['Vehicle Trip', 'First Detection Time', "First Gantry ID", "Last Detection Time",\
+                          'Last Gantry ID', 'Trip Length', 'Trip Finished', 'Trip Info']
         newwindow = tk.Toplevel(title='Your result')
         newwindow.geometry('1600x400')
         columns = result.columns
@@ -92,6 +96,7 @@ class GUI:
         scrollbar = ttk.Scrollbar(newwindow, orient=tk.VERTICAL, command=tree.yview)
         tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row=0, column=1, sticky='ns')
+
 
 class NamedCombobox:
     def __init__(self, master, name, valuelist):

@@ -6,5 +6,16 @@
 
 
 def sort(data, sortlist):
+    sort_columns = []
+    ascending = []
+    for i in range(6):
+        if sortlist[i]:
+            sort_columns.append(i)
+            if sortlist == 'Ascending':
+                ascending.append(True)
+            else:
+                ascending.append(False)
+
+    sort_result = data.sort_values(by=sort_columns, ascending=ascending)
 
     return sort_result
