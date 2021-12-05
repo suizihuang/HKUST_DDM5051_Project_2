@@ -28,6 +28,7 @@ master_frame--------------------------------------------------------------------
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.messagebox
+import time
 
 import pandas as pd
 
@@ -68,34 +69,40 @@ class GUI:
         tk.messagebox.showinfo(title='No result', message='Sorry, we can\'t find compatible results')
 
     def show_result(self, result: pd.DataFrame):
-        human_readable = ['Vehicle Trip', 'First Detection Time', "First Gantry ID", "Last Detection Time",\
+        human_readable = ['Vehicle Type', 'First Detection Time', "First Gantry ID", "Last Detection Time",\
                           'Last Gantry ID', 'Trip Length', 'Trip Finished', 'Trip Info']
-        newwindow = tk.Toplevel(title='Your result')
+        newwindow = tk.Toplevel()
+        newwindow.title = 'Your Result'
         newwindow.geometry('1600x400')
         columns = result.columns
         tree = ttk.Treeview(newwindow, show="headings", selectmode='browse', columns=columns)
 
-        tree.column(columns[0], width=50)
-        tree.column(columns[1], width=100)
+        tree.column(columns[0], width=100)
+        tree.column(columns[1], width=200)
         tree.column(columns[2], width=100)
-        tree.column(columns[3], width=100)
-        tree.column(columns[4], width=50)
+        tree.column(columns[3], width=200)
+        tree.column(columns[4], width=100)
         tree.column(columns[5], width=80)
         tree.column(columns[6], width=80)
-        tree.column(columns[7], width=230)
-        tree.grid(row=0, column=0, sticky='nsew')
+        tree.column(columns[7], width=400)
+        tree.pack(side=tk.LEFT, expand=1, fill=tk.BOTH, pady=10, padx=10)
 
         for i in range(len(columns)):
             tree.heading(columns[i], text= human_readable[i])
 
         # add data to the treeview
-        for row in result.iterrows():
+        stt = time.time()
+        for idx in result.index:
+            if time.time() - stt > 5:
+                break
+            row = [i for i in result.loc[idx]]
             tree.insert('', tk.END, values=row)
+
 
         # add a scrollbar
         scrollbar = ttk.Scrollbar(newwindow, orient=tk.VERTICAL, command=tree.yview)
         tree.configure(yscroll=scrollbar.set)
-        scrollbar.grid(row=0, column=1, sticky='ns')
+        scrollbar.pack(side=tk.RIGHT, expand=1, fill=tk.BOTH)
 
 
 class NamedCombobox:

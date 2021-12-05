@@ -86,16 +86,23 @@ def check_legality():
     if not legal:
         window.error_message('Please input time in this format:\n xx:xx:xx')
     else:
-        search_list[1] = '2019/08/30' + search_list[1] + '-' + '2019/08/30' + search_list[2]
-        search_list[4] = '2019/08/30' + search_list[4] + '-' + '2019/08/30' + search_list[5]
+        for i in range(4):
+            if dates[i]:
+                dates[i] = '2019/08/30 ' + dates[i]
+        search_list[1] = dates[0] + '-' + dates[1]
+        search_list[4] = dates[2] + '-' + dates[3]
         del search_list[2]
         del search_list[4]
+        if search_list[-1]:
+            search_list[-1] = 'Y' if search_list[-1] == 'Yes' else 'N'
         search_result = search.Search(data.sheet, search_list)
         sort_list = [window.vt.order.get(), window.dto.order.get(), window.gido.order.get(),\
-                     window.dtd.order.get(), window.gidd.order.get()]
+                     window.dtd.order.get(), window.gidd.order.get(), window.triplen.order.get()]
         sort_result = sort.sort(search_result, sort_list)
-        if not sort_result:
+        if not sort_result.shape[0]:
             window.no_result()
+        else:
+            window.show_result(sort_result)
 
 
 
