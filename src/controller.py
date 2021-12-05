@@ -84,7 +84,7 @@ def check_legality():
         legal = False
 
     if not legal:
-        window.erro_message('Please input time in this format:\n xx:xx:xx')
+        window.error_message('Please input time in this format:\n xx:xx:xx')
     else:
         search_list[1] = '2019/08/30' + search_list[1] + '-' + '2019/08/30' + search_list[2]
         search_list[4] = '2019/08/30' + search_list[4] + '-' + '2019/08/30' + search_list[5]

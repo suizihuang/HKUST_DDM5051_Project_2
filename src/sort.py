@@ -15,7 +15,8 @@ def sort(data, sortlist):
                 ascending.append(True)
             else:
                 ascending.append(False)
+    if not sort_columns:
+        return data
 
     sort_result = data.sort_values(by=sort_columns, ascending=ascending)
-
     return sort_result

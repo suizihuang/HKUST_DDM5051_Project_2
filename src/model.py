@@ -27,3 +27,12 @@ class Sheet:
         gd = [i for i in self.sheet[4].value_counts().index]
         gd.sort()
         return gd
+
+    def add_row(self, row: dict):
+        self.sheet.append(row)
+
+    def get_row(self, idx):
+        return self.sheet.loc[idx]
+
+    def drop_row(self, idx: int):
+        self.sheet.drop(idx, inplace=True)
