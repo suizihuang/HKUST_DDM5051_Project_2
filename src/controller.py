@@ -76,8 +76,8 @@ def check_legality():
     if not legal:
         window.erro_message('Please input time in this format:\n xx:xx:xx')
     else:
-        search_list[1] = search_list[1] + '-' + search_list[2]
-        search_list[4] = search_list[4] + '-' + search_list[5]
+        search_list[1] = '2019/08/30' + search_list[1] + '-' + '2019/08/30' + search_list[2]
+        search_list[4] = '2019/08/30' + search_list[4] + '-' + '2019/08/30' + search_list[5]
         del search_list[2]
         del search_list[4]
         search_result = search.Search(data.sheet, search_list)
@@ -89,7 +89,10 @@ def check_legality():
 
 if __name__ == '__main__':
     data = model.Sheet()
-    window = gui.GUI(['a', 'b'], ['a', 'b'], ['a', 'b'])
+    vehicle_type = data.get_vehichle_type()
+    gantry_o = data.get_gantry_id_o()
+    gantry_d = data.get_gantry_id_d()
+    window = gui.GUI(vehicle_type, gantry_o, gantry_d)
     window.begin.config(command=check_legality)
     window.vt.check.config(command=check_order1)
     window.dto.check.config(command=check_order2)
