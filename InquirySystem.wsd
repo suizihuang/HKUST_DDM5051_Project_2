@@ -10,32 +10,59 @@ interface Sort{
     + sort_data(DataFrame data, list<str> command): DataFrame
 }
 
-class Data{
-    - vehicle_type: int
-    - derectiontime_o: datetime64
-    - gantryid_o: str
-    - derectiontime_d: datetime64
-    - gantryid_d: str
-    - trip_len: float
-    - trip_end: bool
-    - info: str
-}
-
 class Sheet{
-    - sheet: list<Data>
-    + add_row(Data data): void
-    + del_row(int): void
-    + get_row(int): Data
-    + change_row(int): void
+    - sheet: DataFrame
+    + get_vehichle_type(): list
+    + get_gantry_id_o(): list
+    + get_gantry_id_d(): list
+    + add_row(dict): void
+    + get_row(int): Series
+    + drop_row(int): void
 }
 
 class GUI{
-    - mainwindow
-    + show(DataFrame) : void
+    - root_window
+    - vehicle_type: NamedCombobox
+    - dtime_O: Namedtimetextbox
+    - gantryid_O: NamedCombobox
+    - dtime_D: Namedtimetextbox
+    - gantryid_D: NamedCombobox
+    - trip_end: NamedCombobox
+    - vt: SelectionBox
+    - dto: SelectionBox
+    - gido: SelectionBox
+    - dtd : SelectionBox
+    - gidd: SelectionBox
+    - trip_len: SelectionBox
+    + error_message(string error_type): void
+    + no_result(): void
+    + show_result(DataFrame) : void
 }
 
+class NamedCombobox{
+    - combo: Combobox
+}
 
-Sheet "1" *-- "many" Data: has
+class Namedtimetextbox{
+    - s_time: Entry
+    - e_time: Entry
+}
+
+class SelectionBox{
+    - check: Checkbotton
+    - order: Combobox
+}
+
+class controller{
+
+} 
+
 Sheet <-- Search
 Sheet <-- Sort
+GUI "1" *-- "4" NamedCombobox: have >
+GUI "1" *-- "2" Namedtimetextbox: have >
+GUI "1" *-- "6" SelectionBox: have >
+Search <.. controller
+Sort <.. controller
+GUI <.. controller 
 @enduml
